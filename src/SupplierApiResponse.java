@@ -7,7 +7,7 @@ public class SupplierApiResponse {
 	private String dropoff;
 	private List<Option> options;
 	
-	public String getSupplier_id() {
+	public String getSupplierID() {
 		return supplier_id;
 	}
 	
@@ -21,13 +21,5 @@ public class SupplierApiResponse {
 	
 	public List<Option> getOptions() {
 		return Collections.unmodifiableList(options);
-	}
-	
-	public void printOptionsDesc() {
-		Collections.sort(options, Collections.reverseOrder());
-		
-		for (Option option : options) {
-			System.out.println(option.getCarType() + " - " + option.getPrice());
-		}
 	}
 }

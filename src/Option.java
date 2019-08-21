@@ -1,5 +1,5 @@
 
-public class Option implements Comparable<Option> {
+public class Option {
 	private String car_type;
 	private int price;
 	
@@ -9,10 +9,5 @@ public class Option implements Comparable<Option> {
 	
 	public int getPrice() {
 		return price;
-	}
-
-	@Override
-	public int compareTo(Option other) {
-		return Integer.compare(price, other.price);
 	}
 }

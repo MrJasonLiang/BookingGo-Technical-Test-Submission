@@ -18,7 +18,11 @@ public class Part1 {
 		}
 		
 		SearchEngine searchEngine = new SearchEngine();
-		searchEngine.searchRides(stringToLocation(pickup), stringToLocation(dropoff));
+		SearchResult res = searchEngine.searchRides(stringToLocation(pickup), stringToLocation(dropoff), 6);
+		System.out.println("======== RESULTS =======");
+		for (Ride ride : res.getRidesDescPrice()) {
+			System.out.println(ride.getCarType() + " - " + ride.getSupplierID() + " - " + ride.getPrice());
+		}
 	}
 	
 	public static boolean locationStringValid(String location) {
