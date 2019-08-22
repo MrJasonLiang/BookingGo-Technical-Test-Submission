@@ -5,25 +5,20 @@ import java.util.List;
 import java.util.Map;
 
 public class SearchResult {
-	private Map<String, Ride> rides = new HashMap<String, Ride>();
+	private List<Ride> rides = new ArrayList<Ride>();
 	
 	public void addSupplierApiResponse(SupplierApiResponse response) {
 		for (Option option : response.getOptions()) {
-			String carType = option.getCarType();
-			int price = option.getPrice();
-			
-			if (!rides.containsKey(carType) || rides.get(carType).getPrice() > price) {
-				rides.put(carType, new Ride(response.getSupplierID(), carType, price));
-			}
+				rides.add(new Ride(response.getSupplierID(), option.getCarType(), option.getPrice()));
 		}
 	}
 	
 	public void removeInvalidRides(int numPassengers) {
-		Map<String, Ride> filteredRides = new HashMap<String, Ride>(); 
+		List<Ride> filteredRides = new ArrayList<Ride>();
 		
-		for (Ride ride : rides.values()) {
+		for (Ride ride : rides) {
 			if (SearchEngine.carCapacities.get(ride.getCarType()) >= numPassengers) {
-				filteredRides.put(ride.getCarType(), ride);
+				filteredRides.add(ride);
 			}
 		}
 		
@@ -31,10 +26,24 @@ public class SearchResult {
 	}
 	
 	public List<Ride> getRidesDescPrice() {
-		List<Ride> ridesList = new ArrayList<Ride>(rides.values());
+		List<Ride> ridesList = new ArrayList<Ride>(this.getRidesAsMap().values());
 		
 		Collections.sort(ridesList, Collections.reverseOrder());
 		
 		return ridesList;
+	}
+	
+	private Map<String, Ride> getRidesAsMap() {
+		Map<String, Ride> ridesMap = new HashMap<String, Ride>(); 
+		
+		for (Ride ride : rides) {
+			String carType = ride.getCarType();
+			
+			if (!ridesMap.containsKey(carType) || ridesMap.get(carType).getPrice() > ride.getPrice()) {
+				ridesMap.put(carType, ride);
+			}
+		}
+		
+		return ridesMap;
 	}
 }
