@@ -1,10 +1,11 @@
 
 public class Part1 {
 	public static void main(String[] args) {
-		if (args.length != 2) {
-			System.out.println("Insufficient number of command line arguments.");
-			System.out.println("Pickup and dropoff locations should be provided as 2 arguments each in the format 'latitude,longitude'.");
+		if (!(args.length == 2 || args.length == 3)) {
+			System.out.println("Invalid number of command line arguments.");
+			System.out.println("Two arguments, the pickup and dropoff locations, should be provided in the format 'latitude,longitude'.");
 			System.out.println("E.g. '51.470020,-0.454295'.");
+			System.out.println("An optional third argument can be provided to specify the number of passenger.");
 			return;
 		}
 		
@@ -17,10 +18,15 @@ public class Part1 {
 			return;
 		}
 		
-		SearchEngine searchEngine = new SearchEngine();
-		SearchResult res = searchEngine.searchRides(stringToLocation(pickup), stringToLocation(dropoff), 6);
-		System.out.println("======== RESULTS =======");
-		for (Ride ride : res.getRidesDescPrice()) {
+		SearchResult searchResult;
+		
+		if (args.length == 2) {
+			searchResult = new SearchEngine().searchRides(stringToLocation(pickup), stringToLocation(dropoff));
+		} else {
+			searchResult = new SearchEngine().searchRides(stringToLocation(pickup), stringToLocation(dropoff), Integer.parseInt(args[2]));
+		}
+		
+		for (Ride ride : searchResult.getRidesDescPrice()) {
 			System.out.println(ride.getCarType() + " - " + ride.getSupplierID() + " - " + ride.getPrice());
 		}
 	}

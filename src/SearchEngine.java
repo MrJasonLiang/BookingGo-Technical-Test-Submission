@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +10,10 @@ import com.google.gson.Gson;
 
 public class SearchEngine {	
 	public static Map<String, Integer> carCapacities = new HashMap<String, Integer>();
-	private String[] suppliers = {"dave", "eric", "jeff"};
+	private String[] supplierAPIs = {
+			"https://techtest.rideways.com/dave",
+			"https://techtest.rideways.com/eric",
+			"https://techtest.rideways.com/jeff"};
 	
 	public SearchEngine() {
 		carCapacities.put("STANDARD", 4);
@@ -23,77 +25,53 @@ public class SearchEngine {
 	}
 	
 	public SearchResult searchRides(Location pickup, Location dropoff) {
-		SearchResult result = new SearchResult();
+		SearchResult searchResult = new SearchResult();
 		
-		for (String supplier : suppliers) {
-			SupplierApiResponse resp = this.queryAPI(supplier, pickup, dropoff);
-			if (resp == null) {
-				System.out.println("skip");
-				continue;
+		for (String supplierAPI : supplierAPIs) {
+			try {
+				searchResult.addSupplierApiResponse(this.queryAPI(supplierAPI, pickup, dropoff));
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+				System.out.println("Skipping supplier: " + supplierAPI);
 			}
-			result.addSupplierApiResponse(resp);
 		}
 		
-		return result;
+		return searchResult;
 	}
 	
 	public SearchResult searchRides(Location pickup, Location dropoff, int numPassengers) {
-		SearchResult result = this.searchRides(pickup, dropoff);
-		result.removeInvalidRides(numPassengers);
-		return result;
+		SearchResult searchResult = this.searchRides(pickup, dropoff);
+		searchResult.removeInvalidRides(numPassengers);
+		return searchResult;
 	}
 	
-	public SupplierApiResponse queryAPI(String urla, Location pickup, Location dropoff) {
-		// TODO tidy up use of exception
+	private SupplierApiResponse queryAPI(String supplierAPI, Location pickup, Location dropoff) throws IOException {
+		String url = supplierAPI + "?pickup=" + pickup + "&dropoff=" + dropoff;
 		
-		String url = "https://techtest.rideways.com/" + urla + "?pickup=" + pickup + "&dropoff=" + dropoff;
+		HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+		conn.setConnectTimeout(2000);
 		
-		try {
-			HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-			
-			int responseCode = conn.getResponseCode();
-			
-			if (responseCode == HttpURLConnection.HTTP_OK) {
-				System.out.println(conn.getResponseCode());
-				System.out.println(conn.getResponseMessage());
-				System.out.println("gucci");
-			} else if (responseCode == HttpURLConnection.HTTP_BAD_REQUEST) {
-				System.out.println(responseCode);
-				throw new ApiErrorException("dsa");
-			} else if (responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
-				System.out.println(responseCode);
-				return null;
-			} else {
-				System.out.println("error");
-				return null;
-			}
-			
+		int responseCode = conn.getResponseCode();
+		
+		if (responseCode == HttpURLConnection.HTTP_OK) {
 			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			
-			StringBuilder response = new StringBuilder();
+			StringBuilder httpResponse = new StringBuilder();
 			String line;
 			
 			while ((line = in.readLine()) != null) {
-				response.append(line);
-				System.out.println("L: " + line);
+				httpResponse.append(line);
 			}
 			
 			in.close();
 			
-			System.out.println("R: " + response);
-			
-			SupplierApiResponse apiResponse = new Gson().fromJson(response.toString(), SupplierApiResponse.class);
-//			apiResponse.printOptionsDesc();
-			
-			return apiResponse;
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return new Gson().fromJson(httpResponse.toString(), SupplierApiResponse.class);
+		} else if (responseCode == HttpURLConnection.HTTP_BAD_REQUEST) {
+			throw new ApiErrorException("Bad request error. Please check the URL follows the correct format.");
+		} else if (responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
+			throw new ApiErrorException(supplierAPI + " | Internal server error. Something has gone wrong.");
+		} else {
+			throw new ApiErrorException("An error occurred while contacting this supplier's API.");
 		}
-		return null;
 	}
 	
 	public class ApiErrorException extends IOException {
