@@ -25,15 +25,15 @@ public class SearchResult {
 		rides = filteredRides;
 	}
 	
-	public List<Ride> getRidesDescPrice() {
-		List<Ride> ridesList = new ArrayList<Ride>(this.getRidesAsMap().values());
+	public List<Ride> getCheapestRidesDescPrice() {
+		List<Ride> ridesList = new ArrayList<Ride>(this.getCheapestRidesAsMap().values());
 		
 		Collections.sort(ridesList, Collections.reverseOrder());
 		
 		return ridesList;
 	}
 	
-	private Map<String, Ride> getRidesAsMap() {
+	private Map<String, Ride> getCheapestRidesAsMap() {
 		Map<String, Ride> ridesMap = new HashMap<String, Ride>(); 
 		
 		for (Ride ride : rides) {
@@ -45,5 +45,14 @@ public class SearchResult {
 		}
 		
 		return ridesMap;
+	}
+	
+	public void printCheapestRidesDescPrice() {
+		System.out.println("========== Search Results ==========");
+		System.out.println();
+		
+		for (Ride ride : this.getCheapestRidesDescPrice()) {
+			System.out.println(ride.getCarType() + " - " + ride.getSupplierID() + " - " + ride.getPrice());
+		}
 	}
 }

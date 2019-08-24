@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,14 +26,19 @@ public class SearchEngine {
 	}
 	
 	public SearchResult searchRides(Location pickup, Location dropoff) {
+		System.out.println("Searching rides...");
+		System.out.println();
+		
 		SearchResult searchResult = new SearchResult();
 		
 		for (String supplierAPI : supplierAPIs) {
 			try {
+				System.out.println("Contacting supplier API: " + supplierAPI);
 				searchResult.addSupplierApiResponse(this.queryAPI(supplierAPI, pickup, dropoff));
+			} catch (SocketTimeoutException e) {
+				System.out.println("Supplier API took too long to respond. Skipping supplier.");
 			} catch (IOException e) {
-				System.out.println(e.getMessage());
-				System.out.println("Skipping supplier: " + supplierAPI);
+				System.out.println(e.getMessage() + " Skipping supplier.");
 			}
 		}
 		
@@ -66,11 +72,11 @@ public class SearchEngine {
 			
 			return new Gson().fromJson(httpResponse.toString(), SupplierApiResponse.class);
 		} else if (responseCode == HttpURLConnection.HTTP_BAD_REQUEST) {
-			throw new ApiErrorException("Bad request error. Please check the URL follows the correct format.");
+			throw new ApiErrorException("An error occurred whilst contacting the supplier API (bad request error).");
 		} else if (responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
-			throw new ApiErrorException(supplierAPI + " | Internal server error. Something has gone wrong.");
+			throw new ApiErrorException("An error occurred whilst contacting the supplier API (internal server error).");
 		} else {
-			throw new ApiErrorException("An error occurred while contacting this supplier's API.");
+			throw new ApiErrorException("An error occurred whilst contacting the supplier API.");
 		}
 	}
 	

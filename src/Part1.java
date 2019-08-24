@@ -1,37 +1,40 @@
 
 public class Part1 {
 	public static void main(String[] args) {
-		if (!(args.length == 2 || args.length == 3)) {
-			System.out.println("Invalid number of command line arguments.");
-			System.out.println("Two arguments, the pickup and dropoff locations, should be provided in the format 'latitude,longitude'.");
-			System.out.println("E.g. '51.470020,-0.454295'.");
-			System.out.println("An optional third argument can be provided to specify the number of passenger.");
+		if (!argumentsValid(args)) {
+			System.out.println("The command line arguments supplied were invalid.");
+			System.out.println("The first two arguments should be the pickup and dropoff location.");
+			System.out.println("These should be specified in the format 'latitude,longitude', e.g. '51.470020,-0.454295'.");
+			System.out.println("An optional third argument can be provided to specify the number of passengers.");
 			return;
 		}
 		
-		String pickup = args[0];
-		String dropoff = args[1];
-		
-		if (!locationStringValid(pickup) || !locationStringValid(dropoff)) {
-			System.out.println("Pickup or dropoff location invalid. Must be in the format 'latitude,longitude'.");
-			System.out.println("E.g. '51.470020,-0.454295'.");
-			return;
-		}
+		Location pickup = stringToLocation(args[0]);
+		Location dropoff = stringToLocation(args[1]);
 		
 		SearchResult searchResult;
 		
 		if (args.length == 2) {
-			searchResult = new SearchEngine().searchRides(stringToLocation(pickup), stringToLocation(dropoff));
+			searchResult = new SearchEngine().searchRides(pickup, dropoff);
 		} else {
-			searchResult = new SearchEngine().searchRides(stringToLocation(pickup), stringToLocation(dropoff), Integer.parseInt(args[2]));
+			searchResult = new SearchEngine().searchRides(pickup, dropoff, Integer.parseInt(args[2]));
 		}
 		
-		for (Ride ride : searchResult.getRidesDescPrice()) {
-			System.out.println(ride.getCarType() + " - " + ride.getSupplierID() + " - " + ride.getPrice());
+		System.out.println();
+		searchResult.printCheapestRidesDescPrice();
+	}
+	
+	public static boolean argumentsValid(String[] args) {
+		if (args.length == 2) {
+			return locationStringValid(args[0]) && locationStringValid(args[1]);
+		} else if (args.length == 3) {
+			return locationStringValid(args[0]) && locationStringValid(args[1]) && numPassengersValid(args[2]);
+		} else {
+			return false;
 		}
 	}
 	
-	public static boolean locationStringValid(String location) {
+	private static boolean locationStringValid(String location) {
 		String[] coords = location.split(",");
 		
 		if (coords.length != 2) {
@@ -41,6 +44,15 @@ public class Part1 {
 		try {
 			Double.parseDouble(coords[0]);
 			Double.parseDouble(coords[1]);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+	
+	private static boolean numPassengersValid(String numPassengers) {
+		try {
+			Integer.parseInt(numPassengers);
 			return true;
 		} catch (NumberFormatException e) {
 			return false;
