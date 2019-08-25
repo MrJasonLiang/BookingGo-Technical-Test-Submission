@@ -25,6 +25,10 @@ public class SearchResult {
 		rides = filteredRides;
 	}
 	
+	public List<Ride> getAllRides() {
+		return Collections.unmodifiableList(rides);
+	}
+	
 	public List<Ride> getCheapestRidesDescPrice() {
 		List<Ride> ridesList = new ArrayList<Ride>(this.getCheapestRidesAsMap().values());
 		

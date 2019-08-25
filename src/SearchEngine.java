@@ -10,19 +10,23 @@ import java.util.Map;
 import com.google.gson.Gson;
 
 public class SearchEngine {	
-	public static Map<String, Integer> carCapacities = new HashMap<String, Integer>();
+	public static Map<String, Integer> carCapacities = initCarCapacities();
 	private String[] supplierAPIs = {
 			"https://techtest.rideways.com/dave",
 			"https://techtest.rideways.com/eric",
 			"https://techtest.rideways.com/jeff"};
 	
-	public SearchEngine() {
+	private static Map<String, Integer> initCarCapacities() {
+		Map<String, Integer> carCapacities = new HashMap<String, Integer>();
+		
 		carCapacities.put("STANDARD", 4);
 		carCapacities.put("EXECUTIVE", 4);
 		carCapacities.put("LUXURY", 4);
 		carCapacities.put("PEOPLE_CARRIER", 6);
 		carCapacities.put("LUXURY_PEOPLE_CARRIER", 6);
 		carCapacities.put("MINIBUS", 16);
+		
+		return carCapacities;
 	}
 	
 	public SearchResult searchRides(Location pickup, Location dropoff) {
