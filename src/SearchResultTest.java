@@ -25,6 +25,7 @@ public class SearchResultTest {
 			+ "{\"car_type\":\"EXECUTIVE\",\"price\":304345},"
 			+ "{\"car_type\":\"LUXURY\",\"price\":795243},"
 			+ "{\"car_type\":\"LUXURY_PEOPLE_CARRIER\",\"price\":740120}]}";
+	
 	@Test
 	public void testAddSupplierApiResponse() {
 		SearchResult searchResult = new SearchResult();
@@ -35,7 +36,7 @@ public class SearchResultTest {
 		List<Ride> rides = searchResult.getAllRides();
 		Ride firstRide = rides.get(0);
 		
-		assertEquals(2, rides.size());
+		assertEquals(5, rides.size());
 		assertEquals("DAVE", firstRide.getSupplierID());
 		assertEquals("STANDARD", firstRide.getCarType());
 		assertEquals(746638, firstRide.getPrice());
