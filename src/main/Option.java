@@ -1,3 +1,4 @@
+package main;
 
 public class Option {
 	private String car_type;

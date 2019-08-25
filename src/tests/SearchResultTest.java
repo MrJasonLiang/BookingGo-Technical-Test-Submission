@@ -1,3 +1,5 @@
+package tests;
+
 import static org.junit.Assert.*;
 
 import java.util.List;
@@ -5,6 +7,10 @@ import java.util.List;
 import org.junit.Test;
 
 import com.google.gson.Gson;
+
+import main.Ride;
+import main.SearchResult;
+import main.SupplierApiResponse;
 
 public class SearchResultTest {
 	private String daveApiResponse = "{\"supplier_id\":\"DAVE\","

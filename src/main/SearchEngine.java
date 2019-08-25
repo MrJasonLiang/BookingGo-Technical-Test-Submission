@@ -1,3 +1,5 @@
+package main;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -73,21 +75,21 @@ public class SearchEngine {
 			}
 			
 			in.close();
-			
+			// TODO print debug statements check works as intended
 			return new Gson().fromJson(httpResponse.toString(), SupplierApiResponse.class);
 		} else if (responseCode == HttpURLConnection.HTTP_BAD_REQUEST) {
-			throw new ApiErrorException("An error occurred whilst contacting the supplier API (bad request error).");
+			throw new ApiException("An error occurred whilst contacting the supplier API (bad request error).");
 		} else if (responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
-			throw new ApiErrorException("An error occurred whilst contacting the supplier API (internal server error).");
+			throw new ApiException("An error occurred whilst contacting the supplier API (internal server error).");
 		} else {
-			throw new ApiErrorException("An error occurred whilst contacting the supplier API.");
+			throw new ApiException("An error occurred whilst contacting the supplier API.");
 		}
 	}
 	
-	public class ApiErrorException extends IOException {
+	public class ApiException extends IOException {
 		private static final long serialVersionUID = 1L;
 		
-		public ApiErrorException(String message) {
+		public ApiException(String message) {
 			super(message);
 		}
 	}

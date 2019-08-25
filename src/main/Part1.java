@@ -1,16 +1,27 @@
+package main;
 
 public class Part1 {
 	public static void main(String[] args) {
-		if (!argumentsValid(args)) {
+		try {
+			new Part1().run(args);
+		} catch (InvalidArgumentException e) {
+			System.out.println();
+			System.out.println("Terminating due to invalid arguments.");
+		}
+	}
+	
+	public void run(String[] args) throws InvalidArgumentException {
+		if (!this.argumentsValid(args)) {
 			System.out.println("The command line arguments supplied were invalid.");
 			System.out.println("The first two arguments should be the pickup and dropoff location.");
 			System.out.println("These should be specified in the format 'latitude,longitude', e.g. '51.470020,-0.454295'.");
 			System.out.println("An optional third argument can be provided to specify the number of passengers.");
-			return;
+			
+			throw new InvalidArgumentException();
 		}
 		
-		Location pickup = stringToLocation(args[0]);
-		Location dropoff = stringToLocation(args[1]);
+		Location pickup = this.stringToLocation(args[0]);
+		Location dropoff = this.stringToLocation(args[1]);
 		
 		SearchResult searchResult;
 		
@@ -24,17 +35,17 @@ public class Part1 {
 		searchResult.printCheapestRidesDescPrice();
 	}
 	
-	public static boolean argumentsValid(String[] args) {
+	private boolean argumentsValid(String[] args) {
 		if (args.length == 2) {
-			return locationStringValid(args[0]) && locationStringValid(args[1]);
+			return this.locationStringValid(args[0]) && this.locationStringValid(args[1]);
 		} else if (args.length == 3) {
-			return locationStringValid(args[0]) && locationStringValid(args[1]) && numPassengersValid(args[2]);
+			return this.locationStringValid(args[0]) && this.locationStringValid(args[1]) && this.numPassengersValid(args[2]);
 		} else {
 			return false;
 		}
 	}
 	
-	private static boolean locationStringValid(String location) {
+	private boolean locationStringValid(String location) {
 		String[] coords = location.split(",");
 		
 		if (coords.length != 2) {
@@ -50,7 +61,7 @@ public class Part1 {
 		}
 	}
 	
-	private static boolean numPassengersValid(String numPassengers) {
+	private boolean numPassengersValid(String numPassengers) {
 		try {
 			Integer.parseInt(numPassengers);
 			return true;
@@ -59,9 +70,13 @@ public class Part1 {
 		}
 	}
 	
-	public static Location stringToLocation(String location) {
+	private Location stringToLocation(String location) {
 		String[] coords = location.split(",");
 		
 		return new Location(Double.parseDouble(coords[0]), Double.parseDouble(coords[1]));
+	}
+	
+	public class InvalidArgumentException extends Exception {
+		private static final long serialVersionUID = 1L;
 	}
 }
