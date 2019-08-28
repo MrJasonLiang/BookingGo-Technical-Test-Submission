@@ -3,3 +3,6 @@
 bin/
 .classpath
 .project
+
+# Maven Files
+target/
