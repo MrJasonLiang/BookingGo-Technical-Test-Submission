@@ -42,11 +42,11 @@ public class SearchResultTest {
 		List<Ride> rides = searchResult.getAllRides();
 		Ride firstRide = rides.get(0);
 		
-		assertEquals(5, rides.size());
-		assertEquals("DAVE", firstRide.getSupplierID());
-		assertEquals("STANDARD", firstRide.getCarType());
-		assertEquals(746638, firstRide.getPrice());
-		assertEquals("MINIBUS", rides.get(4).getCarType());
+		assertEquals("Number of rides incorrect", 5, rides.size());
+		assertEquals("Supplier ID incorrect", "DAVE", firstRide.getSupplierID());
+		assertEquals("Car type incorrect", "STANDARD", firstRide.getCarType());
+		assertEquals("Price incorrect", 746638, firstRide.getPrice());
+		assertEquals("Car type incorrect", "MINIBUS", rides.get(4).getCarType());
 	}
 	
 	@Test
@@ -57,22 +57,22 @@ public class SearchResultTest {
 		searchResult.addSupplierApiResponse(response);
 		
 		searchResult.removeInvalidRides(4);
-		assertEquals(5, searchResult.getAllRides().size());
+		assertEquals("Number of rides incorrect", 5, searchResult.getAllRides().size());
 		
 		searchResult.removeInvalidRides(5);
-		assertEquals(3, searchResult.getAllRides().size());
+		assertEquals("Number of rides incorrect", 3, searchResult.getAllRides().size());
 		
 		searchResult.removeInvalidRides(6);
-		assertEquals(3, searchResult.getAllRides().size());
+		assertEquals("Number of rides incorrect", 3, searchResult.getAllRides().size());
 		
 		searchResult.removeInvalidRides(7);
-		assertEquals(1, searchResult.getAllRides().size());
+		assertEquals("Number of rides incorrect", 1, searchResult.getAllRides().size());
 		
 		searchResult.removeInvalidRides(16);
-		assertEquals(1, searchResult.getAllRides().size());
+		assertEquals("Number of rides incorrect", 1, searchResult.getAllRides().size());
 		
 		searchResult.removeInvalidRides(17);
-		assertEquals(0, searchResult.getAllRides().size());
+		assertEquals("Number of rides incorrect", 0, searchResult.getAllRides().size());
 	}
 	
 	@Test
@@ -86,15 +86,15 @@ public class SearchResultTest {
 		
 		List<Ride> rides = searchResult.getCheapestRidesDescPrice();
 		
-		assertEquals(6, rides.size());
+		assertEquals("Number of rides incorrect", 6, rides.size());
 		
 		for (int i = 0; i < rides.size() - 1; i++) {
-			assertEquals(true, rides.get(i).getPrice() >= rides.get(i + 1).getPrice());
+			assertEquals("Rides not in descending price order", true, rides.get(i).getPrice() >= rides.get(i + 1).getPrice());
 		}
 		
 		Ride fourthRide = rides.get(3);
 		
-		assertEquals("ERIC", fourthRide.getSupplierID()); //check eric replae dave
-		assertEquals("STANDARD", fourthRide.getCarType());
+		assertEquals("Supplier ID incorrect", "ERIC", fourthRide.getSupplierID()); // Checks Eric car replaces Dave
+		assertEquals("Car type incorrect", "STANDARD", fourthRide.getCarType());
 	}
 }
