@@ -18,13 +18,13 @@ public class RestApiController {
         		return "{\"message\": \"Required String parameter 'pickup' is not present\"}";
         	} else if (!Utilities.locationStringValid(pickup)) {
         		response.status(400);
-        		return "{\"message\": \"Invalid Pickup location\"}";
+        		return "{\"message\": \"Invalid Pickup location. A valid location would be in the format 'lat,long', e.g. '3.410,-2.157'\"}";
         	} else if (dropoff == null) {
         		response.status(400);
         		return "{\"message\": \"Required String parameter 'dropoff' is not present\"}";
         	} else if (!Utilities.locationStringValid(dropoff)) {
         		response.status(400);
-        		return "{\"message\": \"Invalid dropoff location\"}";
+        		return "{\"message\": \"Invalid dropoff location. A valid location would be in the format 'lat,long', e.g. '3.410,-2.157'\"}";
         	}
         	
         	SearchResult searchResult;
@@ -37,7 +37,7 @@ public class RestApiController {
         		searchResult = new SearchEngine().searchRides(pickupLocation, dropoffLocation, Integer.parseInt(numPassengers));
         	} else {
         		response.status(400);
-        		return "{\"message\": \"Invalid number of passengers\"}";
+        		return "{\"message\": \"Invalid number of passengers. Must be a positive integer\"}";
         	}
         	
         	return new Gson().toJson(searchResult.getCheapestRidesDescPrice());
