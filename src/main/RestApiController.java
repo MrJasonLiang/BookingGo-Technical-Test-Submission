@@ -44,17 +44,20 @@ public class RestApiController {
         });
 		
 		post("/rides/api", (request, response) -> {
-			response.status(400);
+			response.type("application/json");
+			response.status(501);
     		return "{\"message\": \"POST operation not supported\"}";
 		});
 
 		put("/rides/api", (request, response) -> {
-			response.status(400);
+			response.type("application/json");
+			response.status(501);
     		return "{\"message\": \"PUT operation not supported\"}";
 		});
 
 		delete("/rides/api", (request, response) -> {
-			response.status(400);
+			response.type("application/json");
+			response.status(501);
     		return "{\"message\": \"DELETE operation not supported\"}";
 		});
 	}
