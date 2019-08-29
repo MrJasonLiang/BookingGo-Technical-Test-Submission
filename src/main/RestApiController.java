@@ -4,8 +4,17 @@ import static spark.Spark.*;
 
 import com.google.gson.Gson;
 
+/**
+ * A class that provides the functionality of the SearchEngine class, exposed as a REST API.
+ * @author Jay
+ */
 public class RestApiController {
+	/**
+	 * Constructs and initialises a new RestApiController object, which starts a REST API that handles
+	 * ride requests.
+	 */
 	public RestApiController() {
+		// Handler for GET requests querying for rides.
 		get("/rides/api", (request, response) -> {
         	response.type("application/json");
 			
@@ -42,6 +51,8 @@ public class RestApiController {
         	
         	return new Gson().toJson(searchResult.getCheapestRidesDescPrice());
         });
+		
+		// Handlers for the unsupported POST, PUT and DELETE operations to the API.
 		
 		post("/rides/api", (request, response) -> {
 			response.type("application/json");

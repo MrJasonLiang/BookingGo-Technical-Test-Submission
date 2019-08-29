@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 
 import main.RestApiController;
 
-public class Part2Test {
+public class RestApiControllerTest {
 	@Before
 	public void setUp() {
 		new RestApiController();
