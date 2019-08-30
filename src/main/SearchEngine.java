@@ -11,10 +11,6 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 
-// TODO Comment all classes
-// TODO Maybe move into packages?
-// TODO Update README
-
 /**
  * A class representing a search engine that queries supplier APIs and returns a search result of ride options.
  * @author Jay

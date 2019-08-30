@@ -7,7 +7,15 @@ import org.junit.Test;
 import main.Part1;
 import main.Part1.InvalidArgumentException;
 
+/**
+ * A JUnit test suite to test that Part1 correctly validates the command line arguments when ran.
+ * @author Jay
+ */
 public class Part1Test {
+	/**
+	 * Tests to see if the 'run()' method of the Part1 class throws the expected exceptions when invalid
+	 * command line arguments are supplied.
+	 */
 	@Test
 	public void testPart1Validation() {
 		try {

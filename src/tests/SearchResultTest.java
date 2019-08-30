@@ -12,6 +12,10 @@ import main.Ride;
 import main.SearchResult;
 import main.SupplierApiResponse;
 
+/**
+ * A JUnit test suite to test the methods of the SearchResult class.
+ * @author Jay
+ */
 public class SearchResultTest {
 	private String daveApiResponse = "{\"supplier_id\":\"DAVE\","
 			+ "\"pickup\":\"3.412,-2.512\","
@@ -32,6 +36,9 @@ public class SearchResultTest {
 			+ "{\"car_type\":\"LUXURY\",\"price\":795243},"
 			+ "{\"car_type\":\"LUXURY_PEOPLE_CARRIER\",\"price\":740120}]}";
 	
+	/**
+	 * Tests that the options from a SupplierApiResponse object are correctly added to the SearchResult object.
+	 */
 	@Test
 	public void testAddSupplierApiResponse() {
 		SearchResult searchResult = new SearchResult();
@@ -49,6 +56,10 @@ public class SearchResultTest {
 		assertEquals("Car type incorrect", "MINIBUS", rides.get(4).getCarType());
 	}
 	
+	/**
+	 * Tests that only options capable of holding the specified number of passengers are kept when the
+	 * 'removeInvalidRides()' method is called on a SearchResult object.
+	 */
 	@Test
 	public void testRemoveInvalidRides() {
 		SearchResult searchResult = new SearchResult();
@@ -75,6 +86,10 @@ public class SearchResultTest {
 		assertEquals("Number of rides incorrect", 0, searchResult.getAllRides().size());
 	}
 	
+	/**
+	 * Tests that the rides returned by the 'getCheapestRidesDescPrice()' method are in descending price order
+	 * and each car type has only one option (the cheapest option between suppliers).
+	 */
 	@Test
 	public void testGetCheapestRidesDescPrice() {
 		SearchResult searchResult = new SearchResult();
@@ -94,7 +109,7 @@ public class SearchResultTest {
 		
 		Ride fourthRide = rides.get(3);
 		
-		assertEquals("Supplier ID incorrect", "ERIC", fourthRide.getSupplierID()); // Checks Eric car replaces Dave
+		assertEquals("Supplier ID incorrect", "ERIC", fourthRide.getSupplierID());
 		assertEquals("Car type incorrect", "STANDARD", fourthRide.getCarType());
 	}
 }

@@ -7,7 +7,15 @@ import org.junit.Test;
 import main.Location;
 import main.Utilities;
 
+/**
+ * A JUnit test suite to test the methods of the Utilities class.
+ * @author Jay
+ */
 public class UtilitiesTest {
+	/**
+	 * Tests that the correct boolean values are returned when the 'locationStringValid()' method is called
+	 * on various valid and invalid strings.
+	 */
 	@Test
 	public void testLocationStringValid() {
 		assertEquals("Incorrect boolean value returned", false, Utilities.locationStringValid(""));
@@ -21,6 +29,10 @@ public class UtilitiesTest {
 		assertEquals("Incorrect boolean value returned", true, Utilities.locationStringValid("-13,12"));
 	}
 	
+	/**
+	 * Tests that the correct boolean values are returned when the 'numPassengersValid()' method is called
+	 * on various valid and invalid strings.
+	 */
 	@Test
 	public void testNumPassengersValid() {
 		assertEquals("Incorrect boolean value returned", false, Utilities.numPassengersValid("one"));
@@ -32,6 +44,10 @@ public class UtilitiesTest {
 		assertEquals("Incorrect boolean value returned", true, Utilities.numPassengersValid("50"));
 	}
 	
+	/**
+	 * Tests that valid location strings are correctly parsed into Location objects using the 'stringToLocation()'
+	 * method.
+	 */
 	@Test
 	public void testStringToLocation() {
 		Location location1 = Utilities.stringToLocation("-13.490,12.360");
